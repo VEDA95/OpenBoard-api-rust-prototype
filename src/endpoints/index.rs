@@ -15,7 +15,7 @@ pub async fn index(request: HttpRequest) -> impl Responder {
     let app_state: &web::Data<AppState> = request.app_data().expect("App state is missing!");
     let query_result = sqlx::query("SELECT (table_name) FROM information_schema.tables;")
         .map(|item: PgRow| item.get("table_name"))
-        .fetch_all(&app_state.db)
+        .fetch_all(app_state.db)
         .await
         .unwrap();
 
