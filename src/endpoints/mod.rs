@@ -1,4 +1,5 @@
 use actix_web::web::{ServiceConfig, get};
+pub mod structs;
 mod index;
 mod auth;
 
