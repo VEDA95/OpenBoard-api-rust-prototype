@@ -4,6 +4,7 @@ use dotenv::dotenv;
 use std::env;
 mod endpoints;
 mod db;
+mod structs;
 
 pub struct AppState<'a> {
     db: &'a PgPool

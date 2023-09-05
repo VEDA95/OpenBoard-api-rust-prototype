@@ -1,8 +1,8 @@
-use actix_web::{body::BoxBody, http::header::ContentType, Responder, HttpResponse, HttpRequest};
 use serde::Serialize;
 use chrono::{DateTime, FixedOffset};
-use crate::endpoints::auth::user::structs::roles::{Permission, Role};
-use crate::endpoints::auth::user::structs::external_provider::UserExternalProvider;
+use crate::structs::user::roles::{Permission, Role};
+use crate::structs::user::external_provider::UserExternalProvider;
+use crate::structs::user::thumbnail::UserThumbnail;
 
 
 #[derive(Serialize)]
@@ -13,23 +13,24 @@ enum ExternalProviderValueTypes {
 
 #[derive(Serialize)]
 enum UserThumbnailValueTypes {
+    UserThumbnail(UserThumbnail),
     Nil
 }
 
 #[derive(Serialize)]
 pub struct User {
-    id: String,
-    date_created: DateTime<FixedOffset>,
-    date_updated: DateTime<FixedOffset>,
-    last_login: DateTime<FixedOffset>,
-    enabled: bool,
-    thumbnail: UserThumbnailValueTypes,
-    username: String,
-    email: String,
-    first_name: String,
-    last_name: String,
-    roles: Vec<Role>,
-    external_provider: ExternalProviderValueTypes
+    pub id: String,
+    pub date_created: DateTime<FixedOffset>,
+    pub date_updated: DateTime<FixedOffset>,
+    pub last_login: DateTime<FixedOffset>,
+    pub enabled: bool,
+    pub thumbnail: UserThumbnailValueTypes,
+    pub username: String,
+    pub email: String,
+    pub first_name: String,
+    pub last_name: String,
+    pub roles: Vec<Role>,
+    pub external_provider: ExternalProviderValueTypes
 }
 
 impl User {
@@ -62,17 +63,5 @@ impl User {
             roles: Vec::new(),
             external_provider: ExternalProviderValueTypes::Nil
         };
-    }
-}
-
-impl Responder for User {
-    type Body = BoxBody;
-
-    fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {
-        let body = serde_json::to_string(&self).unwrap();
-
-        HttpResponse::Ok()
-            .content_type(ContentType::json())
-            .body(body)
     }
 }

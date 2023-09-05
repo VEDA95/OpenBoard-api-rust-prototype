@@ -2,7 +2,7 @@ use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct UserExternalProvider {
-    id: String,
-    name: String,
-    default_login_method: bool
+    pub id: String,
+    pub name: String,
+    pub default_login_method: bool
 }
