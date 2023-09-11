@@ -1,23 +1,23 @@
 use serde::Serialize;
 use chrono::{DateTime, FixedOffset};
-use crate::structs::user::roles::{Permission, Role};
+use crate::structs::user::roles::Role;
 use crate::structs::user::external_provider::UserExternalProvider;
 use crate::structs::user::thumbnail::UserThumbnail;
 
 
-#[derive(Serialize)]
-enum ExternalProviderValueTypes {
+#[derive(Serialize, Clone)]
+pub enum ExternalProviderValueTypes {
     UserExternalProvider(UserExternalProvider),
     Nil
 }
 
-#[derive(Serialize)]
-enum UserThumbnailValueTypes {
+#[derive(Serialize, Clone)]
+pub enum UserThumbnailValueTypes {
     UserThumbnail(UserThumbnail),
     Nil
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 pub struct User {
     pub id: String,
     pub date_created: DateTime<FixedOffset>,
@@ -35,19 +35,16 @@ pub struct User {
 
 impl User {
     pub fn new(
-    id: String,
-    date_created: String,
-    date_updated: String,
-    last_login: String,
-    enabled: bool,
-    username: String,
-    email: String,
-    first_name: String,
-    last_name: String,
-    thumnail: UserThumbnailValueTypes,
-    external_provider: ExternalProviderValueTypes,
-    roles: Vec<Role>,
-    permissions: Vec<Permission>) -> User {
+        id: String,
+        date_created: String,
+        date_updated: String,
+        last_login: String,
+        enabled: bool,
+        username: String,
+        email: String,
+        first_name: String,
+        last_name: String
+    ) -> User {
         const DATETIME_FORMAT: &str = "%b %d %Y %H:%M %z";
         return User {
             id: id,
@@ -60,8 +57,21 @@ impl User {
             first_name: first_name,
             last_name: last_name,
             thumbnail: UserThumbnailValueTypes::Nil,
-            roles: Vec::new(),
-            external_provider: ExternalProviderValueTypes::Nil
+            external_provider: ExternalProviderValueTypes::Nil,
+            roles: Vec::new()
         };
+    }
+
+    pub fn add_external_provider(&mut self, provider: UserExternalProvider) -> () {
+        self.external_provider = ExternalProviderValueTypes::UserExternalProvider(provider);
+
+    }
+
+    pub fn add_thumbnail(&mut self, thumbnail: UserThumbnail) -> () {
+        self.thumbnail = UserThumbnailValueTypes::UserThumbnail(thumbnail);
+    }
+
+    pub fn add_role(&mut self, role: Role) -> () {
+        self.roles.push(role);
     }
 }

@@ -1,25 +1,23 @@
-use serde_json::Value;
 use actix_web::{body::BoxBody, http::header::ContentType, HttpRequest, HttpResponse, Responder};
 use serde::Serialize;
 
-
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct SuccessMessageResponse {
     pub code: i16,
     pub message: String
 }
 
-#[derive(Serialize)]
-pub struct SuccessDataResponse {
+#[derive(Serialize, Debug)]
+pub struct SuccessDataResponse<T> {
     pub code: i16,
-    pub data: Value
+    pub data: T
 }
 
-#[derive(Serialize)]
-pub struct SuccessDataArrayResponse {
+#[derive(Serialize, Debug)]
+pub struct SuccessDataArrayResponse<T> {
     pub code: i16,
     pub count: usize,
-    pub data: Vec<Value>
+    pub data: Vec<T>
 }
 
 impl SuccessMessageResponse {
@@ -38,15 +36,15 @@ impl SuccessMessageResponse {
     }
 }
 
-impl SuccessDataResponse {
-    pub fn ok(data: Value) -> SuccessDataResponse {
+impl<T> SuccessDataResponse<T> {
+    pub fn ok(data: T) -> SuccessDataResponse<T> {
         return SuccessDataResponse {
             code: 200,
             data: data
         };
     }
 
-    pub fn created(data: Value) -> SuccessDataResponse {
+    pub fn created(data: T) -> SuccessDataResponse<T> {
         return SuccessDataResponse {
             code: 201,
             data: data
@@ -54,10 +52,18 @@ impl SuccessDataResponse {
     }
 }
 
-impl SuccessDataArrayResponse {
-    pub fn ok(data: Vec<Value>) -> SuccessDataArrayResponse {
+impl<T> SuccessDataArrayResponse<T> {
+    pub fn ok(data: Vec<T>) -> SuccessDataArrayResponse<T> {
         return SuccessDataArrayResponse {
             code: 200,
+            count: data.len(),
+            data: data
+        };
+    }
+
+    pub fn created(data: Vec<T>) -> SuccessDataArrayResponse<T> {
+        return SuccessDataArrayResponse {
+            code: 201,
             count: data.len(),
             data: data
         };
@@ -76,7 +82,7 @@ impl Responder for SuccessMessageResponse {
     }
 }
 
-impl Responder for SuccessDataResponse {
+impl <T> Responder for SuccessDataResponse<T> where T: Serialize {
     type Body = BoxBody;
 
     fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {
@@ -94,7 +100,7 @@ impl Responder for SuccessDataResponse {
     }
 }
 
-impl Responder for SuccessDataArrayResponse {
+impl <T> Responder for SuccessDataArrayResponse<T> where T: Serialize {
     type Body = BoxBody;
 
     fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {

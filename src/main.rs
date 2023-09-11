@@ -6,8 +6,8 @@ mod endpoints;
 mod db;
 mod structs;
 
-pub struct AppState<'a> {
-    db: &'a PgPool
+pub struct AppState {
+    db: PgPool
 }
 
 #[actix_web::main]
@@ -17,7 +17,7 @@ async fn main() -> std::io::Result<()> {
     let host: String = env::var("HOST").expect("Host IP to run api on is required!");
     let port: i32 = env::var("PORT").expect("Port number to run api on is requires!").parse().unwrap();
     let db_uri: String = env::var("DB_URI").expect("A database URI is required!");
-    let mut pool = match PgPoolOptions::new()
+    let pool = match PgPoolOptions::new()
        .max_connections(5)
        .connect(&db_uri)
        .await
@@ -34,7 +34,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         let app = App::new()
-            .app_data(web::Data::new(AppState{ db: &pool }))
+            .app_data(web::Data::new(AppState{ db: pool.clone() }))
             .configure(endpoints::endpoints_factory);
 
         return app;

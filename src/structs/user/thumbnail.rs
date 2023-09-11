@@ -2,7 +2,7 @@ use serde_json::Value;
 use serde::Serialize;
 use chrono::{DateTime, FixedOffset};
 
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 pub struct UserThumbnail {
     pub id: String,
     pub name: String,
@@ -18,7 +18,7 @@ impl UserThumbnail {
         name: String,
         date_created: String,
         date_updated: String,
-        size: usize,
+        size: String,
         additional_details: Value
     ) -> UserThumbnail {
         const DATETIME_FORMAT: &str = "%b %d %Y %H:%M %z";
@@ -27,7 +27,7 @@ impl UserThumbnail {
             name: name,
             date_created: DateTime::parse_from_str(date_created.as_str(), &DATETIME_FORMAT).unwrap(),
             date_updated: DateTime::parse_from_str(date_updated.as_str(), &DATETIME_FORMAT).unwrap(),
-            size: size,
+            size: size.parse::<usize>().unwrap(),
             additional_details: additional_details
         };
     }
