@@ -1,51 +1,50 @@
-use serde_json::Value;
 use actix_web::{body::BoxBody, http::header::ContentType, HttpRequest, HttpResponse, Responder};
 use serde::Serialize;
 
 
 #[derive(Serialize)]
-pub struct ErrorResponse {
+pub struct ErrorResponse<T> {
     pub code: i16,
-    pub error: Value
+    pub error: T
 }
 
 #[derive(Serialize)]
-pub struct ErrorArrayResponse {
+pub struct ErrorArrayResponse<T> {
     pub code: i16,
     pub count: usize,
-    pub errors: Vec<Value>
+    pub errors: Vec<T>
 }
 
-impl ErrorResponse {
-    pub fn error(data: Value) -> ErrorResponse {
+impl <T> ErrorResponse<T> {
+    pub fn error(data: T) -> ErrorResponse<T> {
         return ErrorResponse {
             code: 400,
             error: data
         };
     }
 
-    pub fn unauthenticated(data: Value) -> ErrorResponse {
+    pub fn unauthenticated(data: T) -> ErrorResponse<T> {
         return ErrorResponse {
             code: 401,
             error: data
         };
     }
 
-    pub fn unauthorized(data: Value) -> ErrorResponse {
+    pub fn unauthorized(data: T) -> ErrorResponse<T> {
         return ErrorResponse {
             code: 403,
             error: data
         };
     }
 
-    pub fn not_found(data: Value) -> ErrorResponse {
+    pub fn not_found(data: T) -> ErrorResponse<T> {
         return ErrorResponse {
             code: 404,
             error: data
         };
     }
 
-    pub fn unsupported_media_type(data: Value) -> ErrorResponse {
+    pub fn unsupported_media_type(data: T) -> ErrorResponse<T> {
         return ErrorResponse {
             code: 415,
             error: data
@@ -53,8 +52,8 @@ impl ErrorResponse {
     }
 }
 
-impl ErrorArrayResponse {
-    pub fn error(data: Vec<Value>) -> ErrorArrayResponse {
+impl <T> ErrorArrayResponse<T> {
+    pub fn error(data: Vec<T>) -> ErrorArrayResponse<T> {
         return ErrorArrayResponse{
             code: 400,
             count: data.len(),
@@ -62,7 +61,7 @@ impl ErrorArrayResponse {
         };
     }
 
-    pub fn unauthenticated(data: Vec<Value>) -> ErrorArrayResponse {
+    pub fn unauthenticated(data: Vec<T>) -> ErrorArrayResponse<T> {
         return ErrorArrayResponse{
             code: 401,
             count: data.len(),
@@ -70,7 +69,7 @@ impl ErrorArrayResponse {
         };
     }
 
-    pub fn unauthorized(data: Vec<Value>) -> ErrorArrayResponse {
+    pub fn unauthorized(data: Vec<T>) -> ErrorArrayResponse<T> {
         return ErrorArrayResponse{
             code: 403,
             count: data.len(),
@@ -78,7 +77,7 @@ impl ErrorArrayResponse {
         };
     }
 
-    pub fn not_found(data: Vec<Value>) -> ErrorArrayResponse {
+    pub fn not_found(data: Vec<T>) -> ErrorArrayResponse<T> {
         return ErrorArrayResponse{
             code: 404,
             count: data.len(),
@@ -86,7 +85,7 @@ impl ErrorArrayResponse {
         };
     }
 
-    pub fn unsupported_media_type(data: Vec<Value>) -> ErrorArrayResponse {
+    pub fn unsupported_media_type(data: Vec<T>) -> ErrorArrayResponse<T> {
         return ErrorArrayResponse{
             code: 415,
             count: data.len(),
@@ -95,7 +94,7 @@ impl ErrorArrayResponse {
     }
 }
 
-impl Responder for ErrorResponse {
+impl <T> Responder for ErrorResponse<T> where T: Serialize {
     type Body = BoxBody;
 
     fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {
@@ -131,7 +130,7 @@ impl Responder for ErrorResponse {
     }
 }
 
-impl Responder for ErrorArrayResponse {
+impl <T> Responder for ErrorArrayResponse<T> where T: Serialize {
     type Body = BoxBody;
 
     fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {
