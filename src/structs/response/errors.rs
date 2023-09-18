@@ -16,35 +16,35 @@ pub struct ErrorArrayResponse<T> {
 }
 
 impl <T> ErrorResponse<T> {
-    pub fn error(data: T) -> ErrorResponse<T> {
+    pub fn error(data: T) -> Self {
         return ErrorResponse {
             code: 400,
             error: data
         };
     }
 
-    pub fn unauthenticated(data: T) -> ErrorResponse<T> {
+    pub fn unauthenticated(data: T) -> Self {
         return ErrorResponse {
             code: 401,
             error: data
         };
     }
 
-    pub fn unauthorized(data: T) -> ErrorResponse<T> {
+    pub fn unauthorized(data: T) -> Self {
         return ErrorResponse {
             code: 403,
             error: data
         };
     }
 
-    pub fn not_found(data: T) -> ErrorResponse<T> {
+    pub fn not_found(data: T) -> Self {
         return ErrorResponse {
             code: 404,
             error: data
         };
     }
 
-    pub fn unsupported_media_type(data: T) -> ErrorResponse<T> {
+    pub fn unsupported_media_type(data: T) -> Self {
         return ErrorResponse {
             code: 415,
             error: data
@@ -53,7 +53,7 @@ impl <T> ErrorResponse<T> {
 }
 
 impl <T> ErrorArrayResponse<T> {
-    pub fn error(data: Vec<T>) -> ErrorArrayResponse<T> {
+    pub fn error(data: Vec<T>) -> Self {
         return ErrorArrayResponse{
             code: 400,
             count: data.len(),
@@ -61,7 +61,7 @@ impl <T> ErrorArrayResponse<T> {
         };
     }
 
-    pub fn unauthenticated(data: Vec<T>) -> ErrorArrayResponse<T> {
+    pub fn unauthenticated(data: Vec<T>) -> Self {
         return ErrorArrayResponse{
             code: 401,
             count: data.len(),
@@ -69,7 +69,7 @@ impl <T> ErrorArrayResponse<T> {
         };
     }
 
-    pub fn unauthorized(data: Vec<T>) -> ErrorArrayResponse<T> {
+    pub fn unauthorized(data: Vec<T>) -> Self {
         return ErrorArrayResponse{
             code: 403,
             count: data.len(),
@@ -77,7 +77,7 @@ impl <T> ErrorArrayResponse<T> {
         };
     }
 
-    pub fn not_found(data: Vec<T>) -> ErrorArrayResponse<T> {
+    pub fn not_found(data: Vec<T>) -> Self {
         return ErrorArrayResponse{
             code: 404,
             count: data.len(),
@@ -85,7 +85,7 @@ impl <T> ErrorArrayResponse<T> {
         };
     }
 
-    pub fn unsupported_media_type(data: Vec<T>) -> ErrorArrayResponse<T> {
+    pub fn unsupported_media_type(data: Vec<T>) -> Self {
         return ErrorArrayResponse{
             code: 415,
             count: data.len(),

@@ -21,14 +21,14 @@ pub struct SuccessDataArrayResponse<T> {
 }
 
 impl SuccessMessageResponse {
-    pub fn ok(message: &str) -> SuccessMessageResponse {
+    pub fn ok(message: &str) -> Self {
         return SuccessMessageResponse {
             code: 200,
             message: message.to_string()
         };
     }
 
-    pub fn created(message: &str) -> SuccessMessageResponse {
+    pub fn created(message: &str) -> Self {
         return SuccessMessageResponse {
             code: 201,
             message: message.to_string()
@@ -37,14 +37,14 @@ impl SuccessMessageResponse {
 }
 
 impl<T> SuccessDataResponse<T> {
-    pub fn ok(data: T) -> SuccessDataResponse<T> {
+    pub fn ok(data: T) -> Self {
         return SuccessDataResponse {
             code: 200,
             data: data
         };
     }
 
-    pub fn created(data: T) -> SuccessDataResponse<T> {
+    pub fn created(data: T) -> Self {
         return SuccessDataResponse {
             code: 201,
             data: data
@@ -53,7 +53,7 @@ impl<T> SuccessDataResponse<T> {
 }
 
 impl<T> SuccessDataArrayResponse<T> {
-    pub fn ok(data: Vec<T>) -> SuccessDataArrayResponse<T> {
+    pub fn ok(data: Vec<T>) -> Self {
         return SuccessDataArrayResponse {
             code: 200,
             count: data.len(),
@@ -61,7 +61,7 @@ impl<T> SuccessDataArrayResponse<T> {
         };
     }
 
-    pub fn created(data: Vec<T>) -> SuccessDataArrayResponse<T> {
+    pub fn created(data: Vec<T>) -> Self {
         return SuccessDataArrayResponse {
             code: 201,
             count: data.len(),
